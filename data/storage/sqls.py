@@ -17,6 +17,8 @@ group_id INTEGER NOT NULL
 
 INSERT_GROUP = """INSERT INTO groups (group_id, user_id, group_name) VALUES (?, ?, ?)"""
 
+DELETE_GROUP = """DELETE FROM groups WHERE group_id=? AND user_id=?"""
+
 INSERT_FAVORITE = """INSERT INTO favorite (user_id, group_id) VALUES (?, ?)"""
 
 UPDATE_FAVORITE = """UPDATE favorite SET group_id = ? WHERE user_id = ?"""

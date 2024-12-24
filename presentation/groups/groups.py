@@ -3,7 +3,7 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message, InlineKeyboardMarkup
 
-from domain.groups import get_command_groups, change_favorite
+from domain.groups import get_command_groups, change_favorite, delete_group
 from loader import dp
 from presentation.groups.new_group import add_new_group
 
@@ -25,6 +25,14 @@ async def change_favorite_handler(callback: CallbackQuery) -> None:
         await callback.message.edit_reply_markup(reply_markup=res)
     elif isinstance(res, str):
         await callback.answer(res)
+
+
+@dp.callback_query(F.data.startswith("delete_"))
+async def delete_group_handler(callback: CallbackQuery) -> None:
+    delete_group_id = int(callback.data.replace("delete_", ""))
+    user_id = callback.from_user.id
+    keyboard = delete_group(delete_group_id, user_id)
+    await callback.message.edit_reply_markup(reply_markup=keyboard)
 
 
 @dp.callback_query(F.data == "new_group")

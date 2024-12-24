@@ -25,7 +25,7 @@ def get_faculty_inline_keyboard(faculties: list[str]) -> InlineKeyboardMarkup:
     return builder.as_markup()
 
 
-def simple_list_keyboard(lst: list[str], callback_data_prefix: str, use_index: bool=True) -> InlineKeyboardMarkup:
+def simple_list_keyboard(lst: list[str], callback_data_prefix: str, use_index: bool = True) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for index, obj in enumerate(lst):
         callback_data = f"{callback_data_prefix}{index if use_index else obj}"
@@ -109,6 +109,11 @@ def get_favorite_inline_keyboard(groups: list[ModelGroup], favorite_id: int) -> 
             line_button.append(InlineKeyboardButton(
                 text="⭐",
                 callback_data=f"favorite_{group.id}"
+            ))
+        else:
+            line_button.append(InlineKeyboardButton(
+                text="🗑️",
+                callback_data=f"delete_{group.id}"
             ))
         line_button.append(InlineKeyboardButton(text=group.name, callback_data=f"favorite_{group.id}"))
         buttons.append(line_button)

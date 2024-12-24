@@ -25,6 +25,11 @@ class Database(StorageABC):
         self.con.commit()
 
     @override
+    def delete_group(self, id_group: int, id_user: int):
+        self.cur.execute(DELETE_GROUP, (id_group, id_user))
+        self.con.commit()
+
+    @override
     def set_favorite_group(self, id_user: int, id_group: int):
         current_favorite = self.fetch_favorite_user_group(id_user)
         if current_favorite is None:
