@@ -23,7 +23,7 @@ async def enter_classroom_name(message: Message, state: FSMContext):
     if isinstance(view, ViewError):
         await message.answer(view.error)
         return
-    if len(view) == 1:
+    if len(view) == 1 and view[0].name == classroom_name:
         view = get_classroom_schedule(message.date, view[0])
         if isinstance(view, ViewError):
             await message.answer(view.error)
@@ -31,7 +31,8 @@ async def enter_classroom_name(message: Message, state: FSMContext):
         keyboard = get_schedule_keyboard(
             view.str_prev_date,
             view.str_date,
-            view.str_next_date
+            view.str_next_date,
+            "classroom"
         )
         await message.answer(str(view), reply_markup=keyboard)
     await state.set_state(ClassroomState.classroom_choose)
@@ -54,6 +55,7 @@ async def choose_classroom(callback: CallbackQuery, state: FSMContext):
     classroom_index = int(callback.data.replace("classroom_", ""))
     classrooms = (await state.get_data())["classrooms"]
     classroom = classrooms[classroom_index]
+    await state.update_data(classroom=classroom)
     view = get_classroom_schedule(callback.message.date, classroom)
     if isinstance(view, ViewError):
         await callback.message.answer(view.error)
@@ -61,8 +63,8 @@ async def choose_classroom(callback: CallbackQuery, state: FSMContext):
     keyboard = get_schedule_keyboard(
         view.str_prev_date,
         view.str_date,
-        view.str_next_date
+        view.str_next_date,
+        "classroom"
     )
-    await state.clear()
     await callback.message.answer(str(view), reply_markup=keyboard)
     await callback.message.delete()

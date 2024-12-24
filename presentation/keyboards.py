@@ -34,26 +34,26 @@ def simple_list_keyboard(lst: list[str], callback_data_prefix: str, use_index: b
     return builder.as_markup()
 
 
-def get_schedule_keyboard(prev_date: str, now_date: str, next_date: str) -> InlineKeyboardMarkup:
+def get_schedule_keyboard(prev_date: str, now_date: str, next_date: str, postfix: str) -> InlineKeyboardMarkup:
     kb = [
         [
-            InlineKeyboardButton(text="⏮️", callback_data=f"change_{prev_date}"),
-            InlineKeyboardButton(text="📅", callback_data=f"calendar_{now_date}"),
-            InlineKeyboardButton(text="⏭️", callback_data=f"change_{next_date}")
+            InlineKeyboardButton(text="⏮️", callback_data=f"change_{prev_date}_{postfix}"),
+            InlineKeyboardButton(text="📅", callback_data=f"calendar_{now_date}_{postfix}"),
+            InlineKeyboardButton(text="⏭️", callback_data=f"change_{next_date}_{postfix}")
         ]
     ]
     keyboard = InlineKeyboardMarkup(inline_keyboard=kb)
     return keyboard
 
 
-def get_calendar_keyboard(date: datetime.datetime) -> InlineKeyboardMarkup:
-    postfix = date.strftime("%m.%Y")
+def get_calendar_keyboard(date: datetime.datetime, postfix: str) -> InlineKeyboardMarkup:
+    m_y = date.strftime("%m.%Y")
 
     def placeholder() -> InlineKeyboardButton:
         return InlineKeyboardButton(text=" ", callback_data="placeholder")
 
     def day(num: int) -> InlineKeyboardButton:
-        return InlineKeyboardButton(text=str(num), callback_data=f"day_{num}.{postfix}")
+        return InlineKeyboardButton(text=str(num), callback_data=f"day_{num}.{m_y}_{postfix}")
 
     count_day_in_month = calendar.monthrange(date.year, date.month)[1]
     weekday_first_day_in_month = date.replace(day=1).weekday()
@@ -70,10 +70,10 @@ def get_calendar_keyboard(date: datetime.datetime) -> InlineKeyboardMarkup:
     now_year_str = date.strftime("%Y")
 
     lines.append([
-        InlineKeyboardButton(text="⏮️", callback_data=f"calendar_change_{human_date(prev_date)}"),
+        InlineKeyboardButton(text="⏮️", callback_data=f"calendar_change_{human_date(prev_date)}_{postfix}"),
         InlineKeyboardButton(text=now_month_str, callback_data=f"no"),
         InlineKeyboardButton(text=now_year_str, callback_data=f"no"),
-        InlineKeyboardButton(text="⏭️", callback_data=f"calendar_change_{human_date(next_date)}"),
+        InlineKeyboardButton(text="⏭️", callback_data=f"calendar_change_{human_date(next_date)}_{postfix}"),
     ])
 
     lines.append([

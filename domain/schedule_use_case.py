@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from aiogram.fsm.context import FSMContext
+
 from data.models.model_classroom import ModelClassroom
 from data.models.model_group import ModelGroup
 from data.models.model_schedule_classroom import ModelScheduleClassroom
@@ -51,3 +53,16 @@ def get_classroom_schedule(date: datetime, classroom: ModelClassroom) -> ViewDay
         import traceback
         print(traceback.format_exc())
         return ViewError.something_went_wrong(e)
+
+
+async def change_schedule(str_date: str, postfix: str, state: FSMContext) -> ViewDay | ViewError:
+    date = datetime.strptime(str_date, "%d.%m.%Y")
+
+    if postfix == "group":
+        group = (await state.get_data())["group"]
+        view = get_group_schedule(date, group)
+    else:
+        classroom = (await state.get_data())["classroom"]
+        view = get_classroom_schedule(date, classroom)
+
+    return view
