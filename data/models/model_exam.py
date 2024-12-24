@@ -42,7 +42,7 @@ class ModelExam:
 
     @property
     def datetime(self):
-        return self.date_and_time.strftime("%d.%m.%Y %H:%M:%S")
+        return self.date_and_time.strftime("%d.%m.%Y %H:%M")
 
     @property
     def examiner_fio(self):
