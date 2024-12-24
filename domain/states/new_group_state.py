@@ -9,7 +9,7 @@ class NewGroupState(StatesGroup):
     sub_group = State()
 
     @staticmethod
-    async def all(context: FSMContext) -> (int | None, str | None, str | None, str | None):
+    async def get_group_name(context: FSMContext) -> (int | None, str | None, str | None, str | None):
         state_data = await context.get_data()
 
         def safe_get(key: str):

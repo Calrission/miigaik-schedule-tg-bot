@@ -1,32 +1,49 @@
+from datetime import datetime
+
 from aiogram import F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
-
-from domain.schedule import get_schedule
+from domain.schedule_use_case import get_group_schedule
 from domain.states.data_state import DataState
 from loader import dp
 from main import actualize_state
 from presentation import add_new_group
 from presentation.keyboards import get_schedule_keyboard
+from presentation.view.view_error import ViewError
 
 
 @dp.message(Command("schedule"), DataState.group)
 async def command_schedule(message: Message, state: FSMContext) -> None:
     await actualize_state(message.from_user.id, state)
     group = (await state.get_data())["group"]
-    message_text, prev_date, now_date, next_date = get_schedule(message.date, group)
-    keyboard = get_schedule_keyboard(prev_date, now_date, next_date)
-    await message.answer(message_text, reply_markup=keyboard)
+    view = get_group_schedule(message.date, group)
+    if isinstance(view, ViewError):
+        await message.answer(view.error)
+        return
+    keyboard = get_schedule_keyboard(
+        view.str_prev_date,
+        view.str_date,
+        view.str_next_date
+    )
+    await message.answer(str(view), reply_markup=keyboard)
 
 
 @dp.callback_query(F.data.startswith("change_"), DataState.group)
 async def next_prev_schedule_handler(callback: CallbackQuery, state: FSMContext) -> None:
     str_date = callback.data.replace("change_", "")
+    date = datetime.strptime(str_date, "%d.%m.%Y")
     group = (await state.get_data())["group"]
-    message_text, prev_date, now_date, next_date = get_schedule(str_date, group)
-    keyboard = get_schedule_keyboard(prev_date, now_date, next_date)
-    await callback.message.edit_text(message_text, reply_markup=keyboard)
+    view = get_group_schedule(date, group)
+    if isinstance(view, ViewError):
+        await callback.message.answer(view.error)
+        return
+    keyboard = get_schedule_keyboard(
+        view.str_prev_date,
+        view.str_date,
+        view.str_next_date
+    )
+    await callback.message.edit_text(str(view), reply_markup=keyboard)
 
 
 @dp.message(Command("schedule"))

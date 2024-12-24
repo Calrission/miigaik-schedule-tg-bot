@@ -1,5 +1,5 @@
 from os import getenv
-from aiogram import Dispatcher
+from aiogram import Dispatcher, Bot
 from dotenv import load_dotenv
 
 from data.repositories.remote_data import RemoteData
@@ -18,6 +18,8 @@ else:
 load_dotenv()
 TOKEN = getenv("BOT_TOKEN")
 
+
+bot = Bot(token=TOKEN)
 dp = Dispatcher()
 db: StorageABC = Database("db")
 api: RemoteDataABC = RemoteData()

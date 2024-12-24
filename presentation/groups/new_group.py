@@ -61,7 +61,7 @@ async def callback_choose_group(callback: CallbackQuery, state: FSMContext):
     group = get_buttons_text_message(callback.message)[index_button]
     groups: list[ModelGroup] = (await state.get_data())["groups"]
 
-    year, faculty, _, _ = await NewGroupState.all(state)
+    year, faculty, _, _ = await NewGroupState.get_group_name(state)
 
     subgroups = sorted(
         set([i.subgroup for i in groups if i.group == group and i.year == year and i.faculty == faculty])
@@ -82,7 +82,7 @@ async def callback_choose_subgroup(callback: CallbackQuery, state: FSMContext):
     groups: list[ModelGroup] = (await state.get_data())["groups"]
     already_have_groups = [i.name for i in db.fetch_user_groups(callback.from_user.id)]
 
-    year, faculty, group, _ = await NewGroupState.all(state)
+    year, faculty, group, _ = await NewGroupState.get_group_name(state)
 
     groups = [i for i in groups if i == (year, faculty, group, subgroup)]
 
