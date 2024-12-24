@@ -1,5 +1,7 @@
 from typing import override
 import requests
+
+from data.models.model_exam import ModelExam
 from data.models.model_group import ModelGroup
 from data.models.model_schedule_group import ModelScheduleGroup
 from data.repositories.remote_data_abc import RemoteDataABC
@@ -31,3 +33,11 @@ class RemoteData(RemoteDataABC):
         response.raise_for_status()
         json = response.json()
         return ModelScheduleGroup.from_json(json)
+
+    @override
+    def fetch_exams(self, group_id: int) -> list[ModelExam]:
+        url = self.base_url + f"exam?student_group_id={group_id}"
+        response = requests.get(url)
+        response.raise_for_status()
+        json = response.json()
+        return [ModelExam.from_json(i) for i in json]

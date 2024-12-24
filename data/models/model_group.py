@@ -26,10 +26,15 @@ class ModelGroup:
     def split(self):
         return self._split
 
-    def calc_link(self, current_time_unix: int) -> str:
+    @staticmethod
+    def calc_current_index_week(current_time_unix: int) -> int:
         # 1703451600 - дата нулевой недели
         # 604800 - 7 дней
         current_index_link = (current_time_unix - 1703451600) // 604800
+        return current_index_link
+
+    def calc_link_group(self, current_time_unix: int) -> str:
+        current_index_link = self.calc_current_index_week(current_time_unix)
         return f"group/{self.id}/{current_index_link}"
 
     @property

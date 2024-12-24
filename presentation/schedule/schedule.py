@@ -15,7 +15,7 @@ from presentation.keyboards import get_schedule_keyboard
 async def command_schedule(message: Message, state: FSMContext) -> None:
     await actualize_state(message.from_user.id, state)
     group = (await state.get_data())["group"]
-    message_text, prev_date, now_date, next_date = await get_schedule(message.date, group)
+    message_text, prev_date, now_date, next_date = get_schedule(message.date, group)
     keyboard = get_schedule_keyboard(prev_date, now_date, next_date)
     await message.answer(message_text, reply_markup=keyboard)
 
@@ -24,7 +24,7 @@ async def command_schedule(message: Message, state: FSMContext) -> None:
 async def next_prev_schedule_handler(callback: CallbackQuery, state: FSMContext) -> None:
     str_date = callback.data.replace("change_", "")
     group = (await state.get_data())["group"]
-    message_text, prev_date, now_date, next_date = await get_schedule(str_date, group)
+    message_text, prev_date, now_date, next_date = get_schedule(str_date, group)
     keyboard = get_schedule_keyboard(prev_date, now_date, next_date)
     await callback.message.edit_text(message_text, reply_markup=keyboard)
 

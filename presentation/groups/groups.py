@@ -11,8 +11,8 @@ from presentation.groups.new_group import add_new_group
 @dp.message(Command("groups"))
 async def command_groups_handler(message: Message) -> None:
     id_user = message.from_user.id
-    message, keyboard = get_command_groups(id_user)
-    await message.answer(message, reply_markup=keyboard)
+    msg, keyboard = get_command_groups(id_user)
+    await message.answer(msg, reply_markup=keyboard)
 
 
 @dp.callback_query(F.data.startswith("favorite_"))

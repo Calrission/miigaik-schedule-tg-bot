@@ -16,7 +16,7 @@ def get_schedule(date: datetime | str, group: ModelGroup) -> (str, str, str, str
     day_of_week = date.weekday()
     date_unix = int((date - datetime(1970, 1, 1, tzinfo=date.tzinfo)).total_seconds())
 
-    link = group.calc_link(date_unix)
+    link = group.calc_link_group(date_unix)
     response: ModelScheduleGroup = api.fetch_schedule(link)
     lessons = response.schedule.from_index(day_of_week)
 
@@ -30,7 +30,7 @@ def get_schedule(date: datetime | str, group: ModelGroup) -> (str, str, str, str
             for i in lst
         ])
 
-    message_text = (f"{human_week_day(day_of_week)} | {human_date(date)}\n\n"
+    message_text = (f"{human_week_day(day_of_week)} | {human_date(date)} | {group.name}\n\n"
                     f"{lessons_block(lessons)}")
 
     str_next_date = human_date(date + timedelta(days=1))

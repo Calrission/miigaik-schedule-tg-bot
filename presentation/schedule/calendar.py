@@ -24,7 +24,7 @@ async def select_day_calendar_handler(callback: CallbackQuery, state: FSMContext
     date_str = callback.data.replace("day_", "")
     date = datetime.strptime(date_str, "%d.%m.%Y")
     group = (await state.get_data())["group"]
-    message_text, prev_date, now_date, next_date = await get_schedule(date, group)
+    message_text, prev_date, now_date, next_date = get_schedule(date, group)
     keyboard = get_schedule_keyboard(prev_date, now_date, next_date)
     await callback.message.edit_text(message_text, reply_markup=keyboard)
 
