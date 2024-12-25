@@ -44,5 +44,5 @@ class ModelLesson:
         return (f"{self.lesson_order_number} | {self.lesson_start_time} — {self.lesson_end_time} | {self.lesson_type}\n"
                 f"{self.discipline_name}\n"
                 f"{(self.group_name + "\n") if self.many_groups else ''}"
-                f"👨🏻‍🏫 {(", ".join([str(j) for j in self.teachers]) + "\n") if self.teachers else ""}"
+                f"{("👨🏻‍🏫" + (", ".join([str(j) for j in self.teachers])) + "\n") if self.teachers else ""}"
                 f"{'🚪Аудитория ' if not is_war else '🪖 '}{self.classroom_name} | {self.classroom_building} | {self.classroom_floor} этаж")

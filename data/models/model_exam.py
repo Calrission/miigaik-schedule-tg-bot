@@ -52,5 +52,5 @@ class ModelExam:
         is_war = self.classroom_name == 'Военный учебный центр'
         return (f"{self.datetime}\n"
                 f"{self.discipline_name}\n"
-                f"{self.examiner_fio}\n"
+                f"👨🏻‍🏫 {self.examiner_fio}\n"
                 f"{'🚪Аудитория ' if not is_war else '🪖 '}{self.classroom_name} | {self.classroom_building_name} | {self.classroom_floor} этаж")
