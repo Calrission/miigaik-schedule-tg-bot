@@ -49,6 +49,8 @@ class ModelExam:
         return f"{self.examiner_lastname} {self.examiner_firstname} {self.examiner_patronymic}"
 
     def __str__(self):
-        return f"""{self.datetime}
-{self.discipline_name}\n{self.examiner_fio}
-{'Аудитория ' if self.classroom_name != 'Военный учебный центр' else ''}{self.classroom_name} | {self.classroom_building_name} | {self.classroom_floor} этаж"""
+        is_war = self.classroom_name == 'Военный учебный центр'
+        return (f"{self.datetime}\n"
+                f"{self.discipline_name}\n"
+                f"{self.examiner_fio}\n"
+                f"{'🚪Аудитория ' if not is_war else '🪖 '}{self.classroom_name} | {self.classroom_building_name} | {self.classroom_floor} этаж")

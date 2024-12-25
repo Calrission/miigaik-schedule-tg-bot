@@ -40,9 +40,9 @@ class ModelLesson:
         )
 
     def __str__(self):
-        return (f"{self.lesson_order_number} пара {self.lesson_start_time} - {self.lesson_end_time}\n"
+        is_war = self.classroom_name == 'Военный учебный центр'
+        return (f"{self.lesson_order_number} | {self.lesson_start_time} — {self.lesson_end_time} | {self.lesson_type}\n"
                 f"{self.discipline_name}\n"
                 f"{(self.group_name + "\n") if self.many_groups else ''}"
-                f"{(", ".join([str(j) for j in self.teachers]) + "\n") if self.teachers else ""}"
-                f"{self.lesson_type}\n"
-                f"{'Аудитория ' if self.classroom_name != 'Военный учебный центр' else ''}{self.classroom_name} | {self.classroom_building} | {self.classroom_floor} этаж")
+                f"👨🏻‍🏫 {(", ".join([str(j) for j in self.teachers]) + "\n") if self.teachers else ""}"
+                f"{'🚪Аудитория ' if not is_war else '🪖 '}{self.classroom_name} | {self.classroom_building} | {self.classroom_floor} этаж")
