@@ -5,6 +5,8 @@ from data.models.model_exam import ModelExam
 from data.models.model_group import ModelGroup
 from data.models.model_schedule_classroom import ModelScheduleClassroom
 from data.models.model_schedule_group import ModelScheduleGroup
+from data.models.model_schedule_teacher import ModelScheduleTeacher
+from data.models.model_search_teacher import ModelSearchTeacher
 
 
 class RemoteDataABC(ABC):
@@ -24,5 +26,11 @@ class RemoteDataABC(ABC):
     def fetch_schedule_classroom(self, current_week_schedule_link: str) -> ModelScheduleClassroom:
         pass
 
+    def fetch_schedule_teacher(self, current_week_schedule_link: str) -> ModelScheduleTeacher:
+        pass
+
     def fetch_exams(self, group_id: int) -> list[ModelExam]:
+        pass
+
+    def search_teacher(self, teacher_name: str) -> list[ModelSearchTeacher]:
         pass

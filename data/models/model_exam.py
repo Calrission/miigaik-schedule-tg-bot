@@ -47,3 +47,8 @@ class ModelExam:
     @property
     def examiner_fio(self):
         return f"{self.examiner_lastname} {self.examiner_firstname} {self.examiner_patronymic}"
+
+    def __str__(self):
+        return f"""{self.datetime}
+{self.discipline_name}\n{self.examiner_fio}
+{'Аудитория ' if self.classroom_name != 'Военный учебный центр' else ''}{self.classroom_name} | {self.classroom_building_name} | {self.classroom_floor} этаж"""

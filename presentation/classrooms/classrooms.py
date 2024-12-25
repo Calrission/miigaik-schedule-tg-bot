@@ -39,12 +39,12 @@ async def enter_classroom_name(message: Message, state: FSMContext):
     await state.update_data(classrooms=view)
     keyboard = simple_list_keyboard(list(map(str, view)), f"classroom_")
     send_message = await message.answer("Выберите аудиторию или введите еще раз:", reply_markup=keyboard)
-    await state.update_data(choose_message_id=(send_message.chat.id, send_message.message_id))
+    await state.update_data(choose_classroom_message_id=(send_message.chat.id, send_message.message_id))
 
 
 @dp.message(ClassroomState.classroom_choose)
 async def reenter_classroom_name(message: Message, state: FSMContext):
-    chat_id, message_id = (await state.get_data())["choose_message_id"]
+    chat_id, message_id = (await state.get_data())["choose_classroom_message_id"]
     await bot.delete_message(chat_id, message_id)
     await enter_classroom_name(message, state)
 

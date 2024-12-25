@@ -18,7 +18,7 @@ class ModelLesson:
     classroom_floor: int
     classroom_building: str
     discipline_name: str
-    teachers: list[ModelTeacher]
+    teachers: list[ModelTeacher] | None
     many_groups: bool = False
 
     @staticmethod
@@ -35,7 +35,7 @@ class ModelLesson:
             classroom_floor=int(json["classroomFloor"]),
             classroom_building=json["classroomBuilding"],
             discipline_name=json["disciplineName"],
-            teachers=[ModelTeacher.from_json(i) for i in json["teachers"]],
+            teachers=[ModelTeacher.from_json(i) for i in json["teachers"]] if "teachers" in json else None,
             many_groups="groups" in json
         )
 
@@ -43,6 +43,6 @@ class ModelLesson:
         return (f"{self.lesson_order_number} пара {self.lesson_start_time} - {self.lesson_end_time}\n"
                 f"{self.discipline_name}\n"
                 f"{(self.group_name + "\n") if self.many_groups else ''}"
-                f"{", ".join([str(j) for j in self.teachers])}\n"
+                f"{(", ".join([str(j) for j in self.teachers]) + "\n") if self.teachers else ""}"
                 f"{self.lesson_type}\n"
                 f"{'Аудитория ' if self.classroom_name != 'Военный учебный центр' else ''}{self.classroom_name} | {self.classroom_building} | {self.classroom_floor} этаж")

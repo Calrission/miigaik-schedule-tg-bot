@@ -103,6 +103,10 @@ async def callback_choose_subgroup(callback: CallbackQuery, state: FSMContext):
         db.insert_group(model_group.id, model_group.name, callback.from_user.id, True)
 
     await callback.message.edit_text(
-        "Введите /schedule для получения расписания\nВведите /groups чтобы выбрать группу",
+        "Введите /schedule для получения расписания\n"
+        "Введите /groups чтобы выбрать группу\n"
+        "Введите /exams для получения списка экзаменов\n"
+        "Введите /classroom чтобы получить расписание конкретной аудитории\n"
+        "Введите /teacher чтобы получить расписание конкретного преподавателя",
         reply_markup=None
     )
