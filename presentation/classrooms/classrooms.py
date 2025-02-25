@@ -25,6 +25,7 @@ async def enter_classroom_name(message: Message, state: FSMContext):
         return
     await state.set_state(ClassroomState.classroom_choose)
     if len(view) == 1 and view[0].name == classroom_name:
+        classroom = view[0]
         view = get_classroom_schedule(message.date, view[0])
         if isinstance(view, ViewError):
             await message.answer(view.error)
@@ -35,6 +36,7 @@ async def enter_classroom_name(message: Message, state: FSMContext):
             view.str_next_date,
             "classroom"
         )
+        await state.update_data(classroom=classroom)
         await message.answer(str(view), reply_markup=keyboard)
     else:
         await state.update_data(classrooms=view)
