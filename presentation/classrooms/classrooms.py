@@ -23,6 +23,7 @@ async def enter_classroom_name(message: Message, state: FSMContext):
     if isinstance(view, ViewError):
         await message.answer(view.error)
         return
+    await state.set_state(ClassroomState.classroom_choose)
     if len(view) == 1 and view[0].name == classroom_name:
         view = get_classroom_schedule(message.date, view[0])
         if isinstance(view, ViewError):
@@ -35,11 +36,11 @@ async def enter_classroom_name(message: Message, state: FSMContext):
             "classroom"
         )
         await message.answer(str(view), reply_markup=keyboard)
-    await state.set_state(ClassroomState.classroom_choose)
-    await state.update_data(classrooms=view)
-    keyboard = simple_list_keyboard(list(map(str, view)), f"classroom_")
-    send_message = await message.answer("Выберите аудиторию или введите еще раз:", reply_markup=keyboard)
-    await state.update_data(choose_classroom_message_id=(send_message.chat.id, send_message.message_id))
+    else:
+        await state.update_data(classrooms=view)
+        keyboard = simple_list_keyboard(list(map(str, view)), f"classroom_")
+        send_message = await message.answer("Выберите аудиторию или введите еще раз:", reply_markup=keyboard)
+        await state.update_data(choose_classroom_message_id=(send_message.chat.id, send_message.message_id))
 
 
 @dp.message(ClassroomState.classroom_choose)

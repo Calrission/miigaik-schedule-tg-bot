@@ -32,8 +32,8 @@ class RemoteData(RemoteDataABC):
         return [ModelClassroom.from_json(i) for i in data]
 
     @override
-    def fetch_schedule_classroom(self, current_week_schedule_link: str) -> ModelScheduleClassroom:
-        url = self.base_url + current_week_schedule_link
+    def fetch_schedule_classroom(self, id_classroom: str, start_date: str, end_date: str) -> ModelScheduleClassroom:
+        url = self.base_url + f"classroom/{id_classroom}?dateStart={start_date}&dateEnd={end_date}"
         response = requests.get(url)
         response.raise_for_status()
         data = response.json()
@@ -47,8 +47,8 @@ class RemoteData(RemoteDataABC):
         return response.json()
 
     @override
-    def fetch_schedule_group(self, current_week_schedule_link: str) -> ModelScheduleGroup:
-        url = self.base_url + current_week_schedule_link
+    def fetch_schedule_group(self, id_schedule: str, start_date: str, end_date: str) -> ModelScheduleGroup:
+        url = self.base_url + f"group/{id_schedule}?dateStart={start_date}&dateEnd={end_date}"
         response = requests.get(url)
         response.raise_for_status()
         json = response.json()
@@ -63,8 +63,8 @@ class RemoteData(RemoteDataABC):
         return [ModelExam.from_json(i) for i in json]
 
     @override
-    def fetch_schedule_teacher(self, current_week_schedule_link: str) -> ModelScheduleTeacher:
-        url = self.base_url + current_week_schedule_link
+    def fetch_schedule_teacher(self, id_teacher: int, start_date: str, end_date: str) -> ModelScheduleTeacher:
+        url = self.base_url + f"teacher/{id_teacher}?dateStart={start_date}&dateEnd={end_date}"
         response = requests.get(url)
         response.raise_for_status()
         json = response.json()

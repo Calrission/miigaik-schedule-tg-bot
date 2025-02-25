@@ -20,13 +20,13 @@ class RemoteDataABC(ABC):
     def search_group(self, group_name: str) -> list[dict]:
         pass
 
-    def fetch_schedule_group(self, current_week_schedule_link: str) -> ModelScheduleGroup:
+    def fetch_schedule_group(self, id_group: int, start_date: str, end_date: str) -> ModelScheduleGroup:
         pass
 
-    def fetch_schedule_classroom(self, current_week_schedule_link: str) -> ModelScheduleClassroom:
+    def fetch_schedule_classroom(self, id_classroom: int, start_date: str, end_date: str) -> ModelScheduleClassroom:
         pass
 
-    def fetch_schedule_teacher(self, current_week_schedule_link: str) -> ModelScheduleTeacher:
+    def fetch_schedule_teacher(self, id_teacher: int, start_date: str, end_date: str) -> ModelScheduleTeacher:
         pass
 
     def fetch_exams(self, group_id: int) -> list[ModelExam]:

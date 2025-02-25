@@ -1,12 +1,14 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
-def date_unix(date: datetime) -> int:
-    return int((date - datetime(1970, 1, 1, tzinfo=date.tzinfo)).total_seconds())
+def calc_current_start_end_date_week(current_time_unix: int) -> (str, str):
+    dt = datetime.fromtimestamp(current_time_unix)
+    start_of_week = dt - timedelta(days=dt.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+    return start_of_week.date().strftime("%Y-%m-%d"), end_of_week.date().strftime("%Y-%m-%d")
 
 
-def calc_current_index_week(current_time_unix: int) -> int:
-    # 1703451600 - дата нулевой недели
-    # 604800 - 7 дней
-    current_index_link = (current_time_unix - 1703451600) // 604800
-    return current_index_link
+def calc_start_end_date_week(date: datetime) -> (str, str):
+    start_of_week = date - timedelta(days=date.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+    return start_of_week.strftime("%Y-%m-%d"), end_of_week.strftime("%Y-%m-%d")

@@ -1,6 +1,6 @@
 import dataclasses
 
-from domain.utils import calc_current_index_week
+from domain.utils import calc_current_start_end_date_week
 
 
 @dataclasses.dataclass
@@ -29,8 +29,8 @@ class ModelGroup:
         return self._split
 
     def calc_link_group(self, current_time_unix: int) -> str:
-        current_index_link = calc_current_index_week(current_time_unix)
-        return f"group/{self.id}/{current_index_link}"
+        start_date, end_date = calc_current_start_end_date_week(current_time_unix)
+        return f"group/{self.id}/?dateStart={start_date}&dateEnd={end_date}"
 
     @property
     def year(self):

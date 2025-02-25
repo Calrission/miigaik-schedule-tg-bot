@@ -8,8 +8,7 @@ from data.models.model_schedule_classroom import ModelScheduleClassroom
 from data.models.model_schedule_group import ModelScheduleGroup
 from data.models.model_schedule_teacher import ModelScheduleTeacher
 from data.models.model_search_teacher import ModelSearchTeacher
-from data.models.model_teacher import ModelTeacher
-from domain.utils import date_unix
+from domain.utils import calc_start_end_date_week
 from loader import api
 from presentation.view.view_day import ViewDay
 from presentation.view.view_error import ViewError
@@ -17,9 +16,11 @@ from presentation.view.view_error import ViewError
 
 def get_group_schedule(date: datetime, group: ModelGroup) -> ViewDay | ViewError:
     day_of_week = date.weekday()
-    link = group.calc_link_group(date_unix(date))
     try:
-        response: ModelScheduleGroup = api.fetch_schedule_group(link)
+        response: ModelScheduleGroup = api.fetch_schedule_group(
+            group.id,
+            *calc_start_end_date_week(date)
+        )
         lessons = response.schedule.from_index(day_of_week)
         next_date = date + timedelta(days=1)
         prev_date = date - timedelta(days=1)
@@ -38,7 +39,10 @@ def get_group_schedule(date: datetime, group: ModelGroup) -> ViewDay | ViewError
 def get_classroom_schedule(date: datetime, classroom: ModelClassroom) -> ViewDay | ViewError:
     day_of_week = date.weekday()
     try:
-        response: ModelScheduleClassroom = api.fetch_schedule_classroom(classroom.current_week_schedule_link)
+        response: ModelScheduleClassroom = api.fetch_schedule_classroom(
+            classroom.id,
+            *calc_start_end_date_week(date)
+        )
         lessons = response.schedule.from_index(day_of_week)
         next_date = date + timedelta(days=1)
         prev_date = date - timedelta(days=1)
@@ -57,7 +61,10 @@ def get_classroom_schedule(date: datetime, classroom: ModelClassroom) -> ViewDay
 def get_teacher_schedule(date: datetime, teacher: ModelSearchTeacher) -> ViewDay | ViewError:
     day_of_week = date.weekday()
     try:
-        response: ModelScheduleTeacher = api.fetch_schedule_teacher(teacher.current_week_schedule_link)
+        response: ModelScheduleTeacher = api.fetch_schedule_teacher(
+            teacher.id,
+            *calc_start_end_date_week(date)
+        )
         lessons = response.schedule.from_index(day_of_week)
         next_date = date + timedelta(days=1)
         prev_date = date - timedelta(days=1)
